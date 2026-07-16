@@ -1,78 +1,221 @@
-/* ---------- Global ---------- */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&display=swap');
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+:root {
+
+    --bg: #0b0b0b;
+    --panel: #121212;
+
+    --text: #f2f2f2;
+    --muted: #777;
+
+    --green: #57c84d;
+    --amber: #ffb347;
+    --blue: #66b3ff;
+    --gray: #666;
+
 }
 
-body {
-    background: #0b0b0b;
-    color: #f2f2f2;
-    font-family: "Segoe UI", Arial, sans-serif;
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
-.container {
-    max-width: 1200px;
-    margin: 60px auto;
-    padding: 0 40px;
+body{
+
+    background:var(--bg);
+    color:var(--text);
+
+    font-family:'IBM Plex Mono', monospace;
+
 }
 
-/* ---------- Header ---------- */
+.container{
 
-header {
-    margin-bottom: 60px;
+    max-width:1100px;
+
+    margin:auto;
+
+    padding:60px 50px;
+
 }
 
-h1 {
-    font-size: 3rem;
-    font-weight: 300;
-    letter-spacing: .25rem;
+header{
+
+    margin-bottom:50px;
+
 }
 
-header p {
-    margin-top: 12px;
-    color: #888;
-    font-size: 1rem;
+h1{
+
+    font-size:3rem;
+
+    font-weight:500;
+
+    letter-spacing:.18em;
+
 }
 
-/* ---------- Clock Area ---------- */
+header p{
 
-#clocks {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 28px;
+    color:var(--muted);
+
+    margin-top:10px;
+
+    font-size:.95rem;
+
 }
 
-/* ---------- Individual Clock ---------- */
+#region,
+.region{
 
-.clock {
-    background: #141414;
-    border: 1px solid #202020;
-    border-radius: 14px;
-    padding: 28px;
-    transition: .2s ease;
+    margin-top:50px;
+
 }
 
-.clock:hover {
-    border-color: #555;
-    transform: translateY(-2px);
+.region h2{
+
+    color:var(--muted);
+
+    font-size:.95rem;
+
+    font-weight:500;
+
+    letter-spacing:.25em;
+
+    margin-bottom:18px;
+
 }
 
-.city {
-    color: #999;
-    text-transform: uppercase;
-    letter-spacing: .15rem;
-    font-size: .8rem;
+.local-card{
+
+    margin:50px 0 60px 0;
+
 }
 
-.time {
-    margin: 14px 0;
-    font-size: 2.4rem;
-    font-weight: 200;
+.local-label{
+
+    color:var(--muted);
+
+    letter-spacing:.2em;
+
+    margin-bottom:12px;
+
 }
 
-.day {
-    color: #666;
-    font-size: .9rem;
+.local-clock{
+
+    font-size:4rem;
+
+    font-weight:300;
+
+    line-height:1;
+
+}
+
+.local-day{
+
+    margin-top:10px;
+
+    color:var(--muted);
+
+    letter-spacing:.15em;
+
+}
+
+.board-row{
+
+    display:grid;
+
+    grid-template-columns:
+
+        2.4fr
+        1.2fr
+        1fr
+        1.3fr;
+
+    align-items:center;
+
+    padding:14px 0;
+
+    border-bottom:1px solid #1c1c1c;
+
+}
+
+.board-zone{
+
+    font-size:1rem;
+
+}
+
+.board-time{
+
+    font-size:1.1rem;
+
+}
+
+.board-day{
+
+    color:var(--muted);
+
+}
+
+.board-status{
+
+    font-weight:500;
+
+    text-align:right;
+
+    letter-spacing:.08em;
+
+}
+
+.business{
+
+    color:var(--green);
+
+}
+
+.early{
+
+    color:var(--blue);
+
+}
+
+.afterhours{
+
+    color:var(--amber);
+
+}
+
+.offline{
+
+    color:var(--gray);
+
+}
+
+@media(max-width:850px){
+
+    .board-row{
+
+        grid-template-columns:1fr;
+
+        gap:6px;
+
+        padding:18px 0;
+
+    }
+
+    .board-status{
+
+        text-align:left;
+
+    }
+
+    .local-clock{
+
+        font-size:3rem;
+
+    }
+
 }
