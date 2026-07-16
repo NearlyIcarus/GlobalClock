@@ -7,7 +7,8 @@ const CONFIG = {
     regions: [
 
         {
-            name: "AMERICAS",
+            title: "AMERICAS",
+            element: "americas",
 
             zones: [
                 { label: "Eastern", timezone: "America/New_York" },
@@ -18,7 +19,8 @@ const CONFIG = {
         },
 
         {
-            name: "AUSTRALIA",
+            title: "AUSTRALIA",
+            element: "australia",
 
             zones: [
                 { label: "Western Australia", timezone: "Australia/Perth" },
