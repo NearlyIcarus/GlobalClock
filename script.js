@@ -1,63 +1,62 @@
-function getTime(timezone) {
+function buildBoard() {
 
-    const now = new Date();
+    // Header
+    document.getElementById("pageTitle").textContent = CONFIG.title;
+    document.getElementById("pageSubtitle").textContent = CONFIG.subtitle;
 
-    return {
+    // ---------- LOCAL TIME ----------
 
-        time: new Intl.DateTimeFormat("en-US", {
-            timeZone: timezone,
-            hour: "numeric",
-            minute: "2-digit",
-            hour12: true
-        }).format(now),
-
-        weekday: new Intl.DateTimeFormat("en-US", {
-            timeZone: timezone,
-            weekday: "long"
-        }).format(now)
-
-    };
-
-}
-
-function updateLocalTime() {
-
-    const local = getTime(Intl.DateTimeFormat().resolvedOptions().timeZone);
+    const localZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const local = getTimeInfo(localZone);
 
     document.getElementById("localTime").innerHTML = `
-
-        <div class="local-label">YOUR TIME</div>
-
-        <div class="local-clock">${local.time}</div>
-
-        <div class="local-day">${local.weekday}</div>
-
+        <div class="local-card">
+            <div class="local-label">LOCAL TIME</div>
+            <div class="local-clock">${local.time}</div>
+            <div class="local-day">${local.date.toLocaleDateString("en-US", {
+                weekday: "long"
+            }).toUpperCase()}</div>
+        </div>
     `;
 
-}
-
-function updateRegions() {
+    // ---------- REGIONS ----------
 
     CONFIG.regions.forEach(region => {
 
-        const container = document.getElementById(region.element);
+        const container = document.getElementById(
+            region.title.toLowerCase()
+        );
 
         container.innerHTML = "";
 
         region.zones.forEach(zone => {
 
-            const t = getTime(zone.timezone);
+            const info = getTimeInfo(zone.timezone);
+
+            const status = getStatus(info.hour);
+
+            const day = getDayLabel(info.date);
 
             container.innerHTML += `
+                <div class="board-row">
 
-                <div class="row">
+                    <div class="board-zone">
+                        ${zone.label}
+                    </div>
 
-                    <span>${zone.label}</span>
+                    <div class="board-time">
+                        ${info.time}
+                    </div>
 
-                    <span>${t.time}</span>
+                    <div class="board-day">
+                        ${day}
+                    </div>
+
+                    <div class="board-status ${status.class}">
+                        ${status.text}
+                    </div>
 
                 </div>
-
             `;
 
         });
@@ -66,14 +65,6 @@ function updateRegions() {
 
 }
 
-function refresh() {
+buildBoard();
 
-    updateLocalTime();
-
-    updateRegions();
-
-}
-
-refresh();
-
-setInterval(refresh,1000);
+setInterval(buildBoard,1000);
