@@ -4,40 +4,57 @@ function buildBoard() {
     document.getElementById("pageTitle").textContent = CONFIG.title;
     document.getElementById("pageSubtitle").textContent = CONFIG.subtitle;
 
-    // ---------- LOCAL TIME ----------
-
+    // Local Time
     const localZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
     const local = getTimeInfo(localZone);
 
     document.getElementById("localTime").innerHTML = `
-        <div class="local-card">
-            <div class="local-label">LOCAL TIME</div>
-            <div class="local-clock">${local.time}</div>
-            <div class="local-day">${local.date.toLocaleDateString("en-US", {
-                weekday: "long"
-            }).toUpperCase()}</div>
+        <div class="local-panel">
+
+            <div class="local-title">
+                LOCAL TIME
+            </div>
+
+            <div class="local-clock">
+                ${local.time}
+            </div>
+
+            <div class="local-day">
+                ${local.date.toLocaleDateString("en-US",{
+                    weekday:"long"
+                }).toUpperCase()}
+            </div>
+
         </div>
     `;
 
-    // ---------- REGIONS ----------
+    // Board
 
-    CONFIG.regions.forEach(region => {
+    let html = `
 
-        const container = document.getElementById(
-            region.title.toLowerCase()
-        );
+        <div class="board-header">
 
-        container.innerHTML = "";
+            <div>ZONE</div>
+            <div>TIME</div>
+            <div>DAY</div>
+            <div>STATUS</div>
 
-        region.zones.forEach(zone => {
+        </div>
+
+    `;
+
+    CONFIG.regions.forEach(region=>{
+
+        html += `<div class="board-divider">${region.title}</div>`;
+
+        region.zones.forEach(zone=>{
 
             const info = getTimeInfo(zone.timezone);
 
             const status = getStatus(info.hour);
 
-            const day = getDayLabel(info.date);
+            html += `
 
-            container.innerHTML += `
                 <div class="board-row">
 
                     <div class="board-zone">
@@ -49,7 +66,7 @@ function buildBoard() {
                     </div>
 
                     <div class="board-day">
-                        ${day}
+                        ${getDayLabel(info.date)}
                     </div>
 
                     <div class="board-status ${status.class}">
@@ -57,11 +74,14 @@ function buildBoard() {
                     </div>
 
                 </div>
+
             `;
 
         });
 
     });
+
+    document.getElementById("board").innerHTML = html;
 
 }
 
