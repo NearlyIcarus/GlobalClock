@@ -1,66 +1,66 @@
 const zones = [
-    {
-        label: "Eastern",
-        timezone: "America/New_York"
-    },
-    {
-        label: "Central",
-        timezone: "America/Chicago"
-    },
-    {
-        label: "Pacific",
-        timezone: "America/Los_Angeles"
-    },
-    {
-        label: "Honolulu",
-        timezone: "Pacific/Honolulu"
-    },
-    {
-        label: "Western Australia",
-        timezone: "Australia/Perth"
-    },
-    {
-        label: "Darwin",
-        timezone: "Australia/Darwin"
-    },
-    {
-        label: "Sydney",
-        timezone: "Australia/Sydney"
-    }
+    { label: "Eastern", timezone: "America/New_York", region: "americas" },
+    { label: "Central", timezone: "America/Chicago", region: "americas" },
+    { label: "Pacific", timezone: "America/Los_Angeles", region: "americas" },
+    { label: "Honolulu", timezone: "Pacific/Honolulu", region: "americas" },
+
+    { label: "Western Australia", timezone: "Australia/Perth", region: "australia" },
+    { label: "Darwin", timezone: "Australia/Darwin", region: "australia" },
+    { label: "Sydney", timezone: "Australia/Sydney", region: "australia" }
 ];
 
-const container = document.getElementById("clocks");
+function formatTime(timezone) {
 
-function buildClocks() {
+    const now = new Date();
 
-    container.innerHTML = "";
-
-    zones.forEach(zone => {
-
-        const now = new Date();
-
-        const time = new Intl.DateTimeFormat("en-US", {
-            timeZone: zone.timezone,
+    return {
+        time: new Intl.DateTimeFormat("en-US", {
+            timeZone: timezone,
             hour: "numeric",
             minute: "2-digit",
             hour12: true
-        }).format(now);
+        }).format(now),
 
-        const day = new Intl.DateTimeFormat("en-US", {
-            timeZone: zone.timezone,
+        day: new Intl.DateTimeFormat("en-US", {
+            timeZone: timezone,
             weekday: "long"
-        }).format(now);
+        }).format(now)
+    };
 
-        container.innerHTML += `
-            <div class="clock">
-                <div class="city">${zone.label}</div>
-                <div class="time">${time}</div>
-                <div class="day">${day}</div>
+}
+
+function buildPage() {
+
+    document.getElementById("americas").innerHTML = "";
+    document.getElementById("australia").innerHTML = "";
+
+    // YOUR LOCAL TIME
+
+    const local = formatTime(Intl.DateTimeFormat().resolvedOptions().timeZone);
+
+    document.getElementById("localTime").innerHTML = `
+        <div class="local">
+            <div class="label">YOUR TIME</div>
+            <div class="localTime">${local.time}</div>
+            <div class="localDay">${local.day}</div>
+        </div>
+    `;
+
+    // WORLD CLOCKS
+
+    zones.forEach(zone => {
+
+        const t = formatTime(zone.timezone);
+
+        document.getElementById(zone.region).innerHTML += `
+            <div class="row">
+                <span>${zone.label}</span>
+                <span>${t.time}</span>
             </div>
         `;
     });
 
 }
 
-buildClocks();
-setInterval(buildClocks, 1000);
+buildPage();
+setInterval(buildPage,1000);
