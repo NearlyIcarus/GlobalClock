@@ -1,19 +1,9 @@
-const zones = [
-    { label: "Eastern", timezone: "America/New_York", region: "americas" },
-    { label: "Central", timezone: "America/Chicago", region: "americas" },
-    { label: "Pacific", timezone: "America/Los_Angeles", region: "americas" },
-    { label: "Honolulu", timezone: "Pacific/Honolulu", region: "americas" },
-
-    { label: "Western Australia", timezone: "Australia/Perth", region: "australia" },
-    { label: "Darwin", timezone: "Australia/Darwin", region: "australia" },
-    { label: "Sydney", timezone: "Australia/Sydney", region: "australia" }
-];
-
-function formatTime(timezone) {
+function getTime(timezone) {
 
     const now = new Date();
 
     return {
+
         time: new Intl.DateTimeFormat("en-US", {
             timeZone: timezone,
             hour: "numeric",
@@ -25,42 +15,51 @@ function formatTime(timezone) {
             timeZone: timezone,
             weekday: "long"
         }).format(now)
+
     };
 
 }
 
 function buildPage() {
 
-    document.getElementById("americas").innerHTML = "";
-    document.getElementById("australia").innerHTML = "";
+    const clocks = document.getElementById("clocks");
+    clocks.innerHTML = "";
 
-    // YOUR LOCAL TIME
+    // Local Time
 
-    const local = formatTime(Intl.DateTimeFormat().resolvedOptions().timeZone);
+    const local = getTime(Intl.DateTimeFormat().resolvedOptions().timeZone);
 
-    document.getElementById("localTime").innerHTML = `
-        <div class="local">
-            <div class="label">YOUR TIME</div>
-            <div class="localTime">${local.time}</div>
-            <div class="localDay">${local.day}</div>
+    clocks.innerHTML += `
+        <div class="local-clock">
+            <div class="city">YOUR TIME</div>
+            <div class="time">${local.time}</div>
+            <div class="day">${local.day}</div>
         </div>
     `;
 
-    // WORLD CLOCKS
+    CONFIG.regions.forEach(region => {
 
-    zones.forEach(zone => {
-
-        const t = formatTime(zone.timezone);
-
-        document.getElementById(zone.region).innerHTML += `
-            <div class="row">
-                <span>${zone.label}</span>
-                <span>${t.time}</span>
-            </div>
+        clocks.innerHTML += `
+            <h2 class="region-title">${region.name}</h2>
         `;
+
+        region.zones.forEach(zone => {
+
+            const t = getTime(zone.timezone);
+
+            clocks.innerHTML += `
+                <div class="row">
+                    <span class="zone">${zone.label}</span>
+                    <span class="zone-time">${t.time}</span>
+                </div>
+            `;
+
+        });
+
     });
 
 }
 
 buildPage();
+
 setInterval(buildPage,1000);
