@@ -11,7 +11,7 @@ function getTime(timezone) {
             hour12: true
         }).format(now),
 
-        day: new Intl.DateTimeFormat("en-US", {
+        weekday: new Intl.DateTimeFormat("en-US", {
             timeZone: timezone,
             weekday: "long"
         }).format(now)
@@ -20,38 +20,44 @@ function getTime(timezone) {
 
 }
 
-function buildPage() {
-
-    const clocks = document.getElementById("clocks");
-    clocks.innerHTML = "";
-
-    // Local Time
+function updateLocalTime() {
 
     const local = getTime(Intl.DateTimeFormat().resolvedOptions().timeZone);
 
-    clocks.innerHTML += `
-        <div class="local-clock">
-            <div class="city">YOUR TIME</div>
-            <div class="time">${local.time}</div>
-            <div class="day">${local.day}</div>
-        </div>
+    document.getElementById("localTime").innerHTML = `
+
+        <div class="local-label">YOUR TIME</div>
+
+        <div class="local-clock">${local.time}</div>
+
+        <div class="local-day">${local.weekday}</div>
+
     `;
+
+}
+
+function updateRegions() {
 
     CONFIG.regions.forEach(region => {
 
-        clocks.innerHTML += `
-            <h2 class="region-title">${region.name}</h2>
-        `;
+        const container = document.getElementById(region.element);
+
+        container.innerHTML = "";
 
         region.zones.forEach(zone => {
 
             const t = getTime(zone.timezone);
 
-            clocks.innerHTML += `
+            container.innerHTML += `
+
                 <div class="row">
-                    <span class="zone">${zone.label}</span>
-                    <span class="zone-time">${t.time}</span>
+
+                    <span>${zone.label}</span>
+
+                    <span>${t.time}</span>
+
                 </div>
+
             `;
 
         });
@@ -60,6 +66,14 @@ function buildPage() {
 
 }
 
-buildPage();
+function refresh() {
 
-setInterval(buildPage,1000);
+    updateLocalTime();
+
+    updateRegions();
+
+}
+
+refresh();
+
+setInterval(refresh,1000);
